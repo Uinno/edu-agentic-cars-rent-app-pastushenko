@@ -20,6 +20,7 @@ A web-based car rental platform that enables users to browse, filter, and rent c
 - **Language:** TypeScript/Node.js
 - **Backend Framework:** NestJS
 - **Frontend Framework:** React + Vite
+- **UI Library:** shadcn/ui (Radix UI primitives + Tailwind CSS v4)
 - **Database:** PostgreSQL (with PostGIS extension for geolocation)
 - **ORM:** TypeORM
 - **Key Integrations:**

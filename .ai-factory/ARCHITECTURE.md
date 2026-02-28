@@ -119,6 +119,9 @@ frontend/
 │   │   └── AdminUsersPage.tsx     # Admin user management
 │   │
 │   ├── components/                # Reusable components
+│   │   ├── ui/                    # shadcn/ui primitives (auto-generated, committed)
+│   │   │                          # Button, Card, Badge, Input, Label, Dialog,
+│   │   │                          # Table, Alert, ToggleGroup, Separator, …
 │   │   ├── auth/                  # Auth-related components
 │   │   │   ├── LoginForm.tsx
 │   │   │   └── ProtectedRoute.tsx
@@ -153,6 +156,9 @@ frontend/
 │   │   ├── user.types.ts
 │   │   ├── car.types.ts
 │   │   └── rental.types.ts
+│   │
+│   ├── lib/                       # shadcn/ui utilities
+│   │   └── utils.ts               # cn() helper (clsx + tailwind-merge)
 │   │
 │   └── utils/                     # Utility functions
 │       ├── formatters.ts          # Date, currency formatters

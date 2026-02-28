@@ -14,6 +14,7 @@ Comprehensive performance optimization guide for React and Next.js applications,
 ## When to Apply
 
 Reference these guidelines when:
+
 - Writing new React components or Next.js pages
 - Implementing data fetching (client or server-side)
 - Reviewing code for performance issues
@@ -22,16 +23,16 @@ Reference these guidelines when:
 
 ## Rule Categories by Priority
 
-| Priority | Category | Impact | Prefix |
-|----------|----------|--------|--------|
-| 1 | Eliminating Waterfalls | CRITICAL | `async-` |
-| 2 | Bundle Size Optimization | CRITICAL | `bundle-` |
-| 3 | Server-Side Performance | HIGH | `server-` |
-| 4 | Client-Side Data Fetching | MEDIUM-HIGH | `client-` |
-| 5 | Re-render Optimization | MEDIUM | `rerender-` |
-| 6 | Rendering Performance | MEDIUM | `rendering-` |
-| 7 | JavaScript Performance | LOW-MEDIUM | `js-` |
-| 8 | Advanced Patterns | LOW | `advanced-` |
+| Priority | Category                  | Impact      | Prefix       |
+| -------- | ------------------------- | ----------- | ------------ |
+| 1        | Eliminating Waterfalls    | CRITICAL    | `async-`     |
+| 2        | Bundle Size Optimization  | CRITICAL    | `bundle-`    |
+| 3        | Server-Side Performance   | HIGH        | `server-`    |
+| 4        | Client-Side Data Fetching | MEDIUM-HIGH | `client-`    |
+| 5        | Re-render Optimization    | MEDIUM      | `rerender-`  |
+| 6        | Rendering Performance     | MEDIUM      | `rendering-` |
+| 7        | JavaScript Performance    | LOW-MEDIUM  | `js-`        |
+| 8        | Advanced Patterns         | LOW         | `advanced-`  |
 
 ## Quick Reference
 
@@ -116,6 +117,64 @@ Reference these guidelines when:
 - `advanced-init-once` - Initialize app once per app load
 - `advanced-use-latest` - useLatest for stable callback refs
 
+---
+
+## shadcn/ui Patterns (Project-Specific)
+
+This project uses **shadcn/ui** (Radix UI + Tailwind CSS v4) for all UI primitives.
+
+### Setup (Vite)
+
+```bash
+npm install tailwindcss @tailwindcss/vite
+npx shadcn@latest init        # New York style, Neutral color, CSS variables: yes
+npx shadcn@latest add button card badge input label dialog table alert toggle-group separator
+```
+
+`vite.config.ts` must include the Tailwind Vite plugin:
+
+```typescript
+import tailwindcss from "@tailwindcss/vite";
+export default defineConfig({ plugins: [react(), tailwindcss()] });
+```
+
+`src/index.css` must start with:
+
+```css
+@import "tailwindcss";
+```
+
+### Component Mapping for This Project
+
+| Use case                         | shadcn component                                                           |
+| -------------------------------- | -------------------------------------------------------------------------- | --------- | ------- | -------------- |
+| Car/rental card                  | `<Card>` + `<CardHeader>` + `<CardContent>` + `<CardFooter>`               |
+| Status indicator                 | `<Badge variant="default                                                   | secondary | outline | destructive">` |
+| Forms (login, register, add-car) | `<Input>` + `<Label>` + `<Button>`                                         |
+| Modals (rent, confirm delete)    | `<Dialog>` + `<DialogContent>` + `<DialogHeader>`                          |
+| Admin data tables                | `<Table>` + `<TableHeader>` + `<TableBody>` + `<TableRow>` + `<TableCell>` |
+| Error / success banners          | `<Alert variant="destructive">` / `<Alert>`                                |
+| Radius filter (5/10/15 km)       | `<ToggleGroup type="single">` + `<ToggleGroupItem>`                        |
+
+### Bundle Optimization with shadcn/ui
+
+- **Import directly** from `@/components/ui/<component>`, never re-export through a barrel `index.ts`
+  (follows `bundle-barrel-imports` rule — prevents bundling all primitives when only one is needed)
+- shadcn components are **copied source files** in `src/components/ui/` — tree-shaking works at the file level automatically
+- Tailwind CSS v4 scans source files at build time — no `content` array needed in config
+
+### `cn()` Helper
+
+Always use the `cn()` utility from `src/lib/utils.ts` for conditional class merging:
+
+```typescript
+import { cn } from '@/lib/utils'
+
+<div className={cn('base-class', condition && 'conditional-class', className)} />
+```
+
+Never concatenate Tailwind classes with string interpolation — `cn()` handles conflicts correctly via `tailwind-merge`.
+
 ## How to Use
 
 Read individual rule files for detailed explanations and code examples:
@@ -126,6 +185,7 @@ rules/bundle-barrel-imports.md
 ```
 
 Each rule file contains:
+
 - Brief explanation of why it matters
 - Incorrect code example with explanation
 - Correct code example with explanation
