@@ -1,0 +1,72 @@
+name: car-rental-prod
+
+services:
+  postgres:
+    image: postgis/postgis:14-3.3
+    restart: always
+    environment:
+      POSTGRES_DB: car_rental
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d car_rental"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - internal
+
+  backend:
+    build:
+      context: ./backend
+      target: production
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/car_rental
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 7d
+      PORT: 3000
+      NODE_ENV: production
+      LOG_LEVEL: ${LOG_LEVEL:-warn}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+      - public
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  frontend:
+    build:
+      context: ./frontend
+      target: production
+      args:
+        VITE_API_URL: ${API_URL:-https://api.example.com}
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - public
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128M
+
+volumes:
+  pgdata:
+
+networks:
+  internal:
+    internal: true
+  public:
