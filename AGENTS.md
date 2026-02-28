@@ -62,13 +62,13 @@ edu-agentic-cars-rent-app-pastushenko/
 
 ## Key Entry Points
 
-| File                        | Purpose                                  | Status          |
-| --------------------------- | ---------------------------------------- | --------------- |
-| backend/src/main.ts         | Backend application entry point          | To be created   |
-| frontend/src/main.tsx       | Frontend application entry point         | To be created   |
-| .ai-factory/DESCRIPTION.md  | Project specification and tech decisions | ✅ Created      |
-| .ai-factory/ARCHITECTURE.md | Architecture patterns and guidelines     | To be generated |
-| .mcp.json                   | MCP servers (PostgreSQL, GitHub)         | ✅ Configured   |
+| File                        | Purpose                                  | Status        |
+| --------------------------- | ---------------------------------------- | ------------- |
+| backend/src/main.ts         | Backend application entry point          | To be created |
+| frontend/src/main.tsx       | Frontend application entry point         | ✅ Created    |
+| .ai-factory/DESCRIPTION.md  | Project specification and tech decisions | ✅ Created    |
+| .ai-factory/ARCHITECTURE.md | Architecture patterns and guidelines     | ✅ Created    |
+| .mcp.json                   | MCP servers (PostgreSQL, GitHub)         | ✅ Configured |
 
 ## Documentation
 
@@ -180,10 +180,9 @@ DATABASE_URL=<same-as-backend>
 
 ## Next Steps
 
-1. **Generate Architecture**: Run `/aif-architecture` to create architecture guidelines
-2. **Plan Backend Structure**: Use `/aif-plan "setup NestJS backend structure with modules"`
-3. **Plan Frontend Setup**: Use `/aif-plan "setup React + Vite frontend with routing"`
-4. **Implement Features**: Follow the planning workflow above
+1. **Implement Backend**: Use `/aif-plan "setup NestJS backend with auth, cars, rentals modules and PostGIS"`
+2. **Database Schema**: Design TypeORM entities and migrations for users, cars, rentals
+3. **Integration Testing**: Connect frontend to live backend and test the full rental flow
 
 ---
 

@@ -96,14 +96,27 @@ cp .env.example .env
 ### Frontend Environment Variables
 
 ```env
-VITE_API_URL=http://localhost:3000
+VITE_API_URL=http://localhost:3000/api
 ```
+
+### Initialize shadcn/ui (first-time setup only)
+
+shadcn/ui is configured via `components.json`. If the `src/components/ui/` directory is missing (e.g., after a fresh clone), re-generate the primitives:
+
+```bash
+# Inside frontend/
+npx shadcn@latest init         # select New York style, Neutral color, CSS variables yes
+npx shadcn@latest add button card badge input label dialog table alert toggle-group separator
+```
+
+> **Note:** shadcn/ui components are copied into `src/components/ui/` and are committed to the repository, so team members do not need to re-run `shadcn init` after `npm install`.
 
 ### Start Frontend Development Server
 
 ```bash
 npm run dev
-# App runs on http://localhost:5173
+# App runs at http://localhost:5173
+# Login at /login, cars at /cars, admin panel at /admin/*
 ```
 
 ## Verify Setup
