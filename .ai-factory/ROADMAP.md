@@ -4,19 +4,19 @@
 
 ## Milestones
 
-- [ ] **Project Foundation** — Initialize NestJS backend and React + Vite frontend with project structure, environment config, and shared tooling (ESLint, TypeScript, Prettier)
+- [x] **Project Foundation** — Initialize NestJS backend and React + Vite frontend with project structure, environment config, and shared tooling (ESLint, TypeScript, Prettier)
 
-- [ ] **Database Schema** — Design and implement TypeORM entities (User, Car, Rental) with migrations; enable PostGIS extension; set up spatial indexes for geolocation
+- [x] **Database Schema** — Design and implement TypeORM entities (User, Car, Rental) with migrations; enable PostGIS extension; set up spatial indexes for geolocation
 
-- [ ] **Authentication System** — Implement user registration and login with JWT access + refresh tokens, bcrypt password hashing, and token rotation on refresh
+- [x] **Authentication System** — Implement user registration and login with JWT access + refresh tokens, bcrypt password hashing, and token rotation on refresh
 
-- [ ] **Role-Based Access Control** — Implement three-tier RBAC (superadmin, admin, user) with NestJS guards and decorators; superadmin can create/delete admins
+- [x] **Role-Based Access Control** — Implement three-tier RBAC (superadmin, admin, user) with NestJS guards and decorators; superadmin can create/delete admins
 
-- [ ] **Car Management API** — CRUD endpoints for cars (admin only); car entity with geolocation fields; car availability status toggle
+- [x] **Car Management API** — CRUD endpoints for cars (admin only); car entity with geolocation fields; car availability status toggle
 
-- [ ] **Geolocation Search** — PostGIS radius filtering with ST_DWithin (5km, 10km, 15km options); distance calculation; spatial index optimization
+- [x] **Geolocation Search** — PostGIS radius filtering with ST_DWithin (5km, 10km, 15km options); distance calculation; spatial index optimization
 
-- [ ] **Rental System** — Car booking logic with availability conflict detection; rental status management (active, completed, cancelled); cancellation policy
+- [x] **Rental System** — Car booking logic with availability conflict detection; rental status management (active, completed, cancelled); cancellation policy
 
 - [ ] **Admin Dashboard API** — Endpoints for viewing active rentals with renter details; user management (list all users, soft delete); car rental history
 
@@ -30,6 +30,13 @@
 
 ## Completed
 
-| Milestone        | Date       |
-| ---------------- | ---------- |
-| AI Factory Setup | 2026-02-27 |
+| Milestone                 | Date       |
+| ------------------------- | ---------- |
+| AI Factory Setup          | 2026-02-27 |
+| Project Foundation        | 2026-02-28 |
+| Database Schema           | 2026-02-28 |
+| Authentication System     | 2026-02-28 |
+| Role-Based Access Control | 2026-02-28 |
+| Car Management API        | 2026-02-28 |
+| Geolocation Search        | 2026-02-28 |
+| Rental System             | 2026-02-28 |

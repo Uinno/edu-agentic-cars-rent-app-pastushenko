@@ -8,7 +8,7 @@ Complete guide for setting up the Car Rental Service development environment.
 
 | Requirement | Version | Notes                          |
 | ----------- | ------- | ------------------------------ |
-| Node.js     | 18+     | [Download](https://nodejs.org) |
+| Node.js     | 24.x    | [Download](https://nodejs.org) |
 | PostgreSQL  | 14+     | With PostGIS extension         |
 | npm         | 9+      | Bundled with Node.js           |
 | Git         | 2.30+   |                                |
@@ -55,8 +55,8 @@ DATABASE_URL=postgresql://postgres:password@localhost:5432/car_rental
 # JWT Authentication
 JWT_SECRET=your-access-token-secret-min-32-chars
 JWT_REFRESH_SECRET=your-refresh-token-secret-min-32-chars
-JWT_EXPIRES_IN=15m
-JWT_REFRESH_EXPIRES_IN=7d
+JWT_ACCESS_EXPIRES=15m
+JWT_REFRESH_EXPIRES=7d
 
 # Application
 PORT=3000
@@ -80,7 +80,8 @@ npm run migration:run
 
 ```bash
 npm run start:dev
-# API runs on http://localhost:3000
+# API runs on http://localhost:3000/api
+# Swagger UI: http://localhost:3000/api/docs
 ```
 
 ## Frontend Setup

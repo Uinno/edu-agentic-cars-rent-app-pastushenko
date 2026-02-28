@@ -7,20 +7,24 @@ All endpoints use JSON request/response bodies. Authenticated endpoints require 
 ## Base URL
 
 ```
-http://localhost:3000
+http://localhost:3000/api
 ```
+
+> **Interactive docs:** Swagger UI is available at `http://localhost:3000/api/docs` when the backend is running.
 
 ## Authentication
 
 ### Register
 
 ```http
-POST /auth/register
+POST /api/auth/register
 Content-Type: application/json
 
 {
   "email": "user@example.com",
-  "password": "SecurePass123!"
+  "password": "SecurePass123!",
+  "firstName": "John",
+  "lastName": "Doe"
 }
 ```
 
@@ -28,16 +32,15 @@ Content-Type: application/json
 
 ```json
 {
-  "id": "uuid",
-  "email": "user@example.com",
-  "role": "user"
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9..."
 }
 ```
 
 ### Login
 
 ```http
-POST /auth/login
+POST /api/auth/login
 Content-Type: application/json
 
 {
@@ -58,7 +61,7 @@ Content-Type: application/json
 ### Refresh Token
 
 ```http
-POST /auth/refresh
+POST /api/auth/refresh
 Authorization: Bearer <refreshToken>
 ```
 
@@ -67,7 +70,7 @@ Authorization: Bearer <refreshToken>
 ### Logout
 
 ```http
-POST /auth/logout
+POST /api/auth/logout
 Authorization: Bearer <accessToken>
 ```
 
@@ -80,7 +83,7 @@ Authorization: Bearer <accessToken>
 ### Get Available Cars
 
 ```http
-GET /cars/available
+GET /api/cars/available
 Authorization: Bearer <accessToken>
 ```
 
@@ -93,9 +96,10 @@ Authorization: Bearer <accessToken>
     "brand": "Toyota",
     "model": "Corolla",
     "year": 2022,
-    "pricePerDay": 45.0,
-    "latitude": 50.4501,
-    "longitude": 30.5234
+    "pricePerDay": "45.00",
+    "isAvailable": true,
+    "location": "0101000020E6100000...",
+    "createdAt": "2026-02-28T12:00:00.000Z"
   }
 ]
 ```
@@ -103,7 +107,7 @@ Authorization: Bearer <accessToken>
 ### Find Cars Nearby (Geolocation)
 
 ```http
-GET /cars/nearby?latitude=50.45&longitude=30.52&radius=10
+GET /api/cars/nearby?latitude=50.45&longitude=30.52&radius=10
 Authorization: Bearer <accessToken>
 ```
 
@@ -115,34 +119,33 @@ Authorization: Bearer <accessToken>
 | longitude | number | Yes      | -180 to 180       |
 | radius    | number | Yes      | 5, 10, or 15 (km) |
 
-**Response 200:**
+**Response 200:** Array of car objects ordered by distance, each including a `distance_meters` field:
 
 ```json
-{
-  "total": 3,
-  "radius": "10km",
-  "cars": [
-    {
-      "id": "uuid",
-      "brand": "Toyota",
-      "model": "Corolla",
-      "distance": "2.34km"
-    }
-  ]
-}
+[
+  {
+    "id": "uuid",
+    "brand": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "pricePerDay": "45.00",
+    "isAvailable": true,
+    "distance_meters": 2340.5
+  }
+]
 ```
 
 ### Get Car Details
 
 ```http
-GET /cars/:id
+GET /api/cars/:id
 Authorization: Bearer <accessToken>
 ```
 
 ### Create Car _(Admin only)_
 
 ```http
-POST /cars
+POST /api/cars
 Authorization: Bearer <adminToken>
 Content-Type: application/json
 
@@ -161,7 +164,7 @@ Content-Type: application/json
 ### Update Car _(Admin only)_
 
 ```http
-PATCH /cars/:id
+PATCH /api/cars/:id
 Authorization: Bearer <adminToken>
 Content-Type: application/json
 
@@ -173,7 +176,7 @@ Content-Type: application/json
 ### Delete Car _(Admin only)_
 
 ```http
-DELETE /cars/:id
+DELETE /api/cars/:id
 Authorization: Bearer <adminToken>
 ```
 
@@ -186,14 +189,14 @@ Authorization: Bearer <adminToken>
 ### Create Rental _(Authenticated users)_
 
 ```http
-POST /rentals
+POST /api/rentals
 Authorization: Bearer <accessToken>
 Content-Type: application/json
 
 {
   "carId": "uuid",
-  "startDate": "2026-03-01T10:00:00Z",
-  "endDate": "2026-03-05T10:00:00Z"
+  "startDate": "2026-03-01",
+  "endDate": "2026-03-05"
 }
 ```
 
@@ -202,11 +205,15 @@ Content-Type: application/json
 ```json
 {
   "id": "uuid",
-  "status": "active",
-  "startDate": "2026-03-01T10:00:00Z",
-  "endDate": "2026-03-05T10:00:00Z",
-  "dailyRate": 45.0,
-  "totalCost": 180.0
+  "carId": "uuid",
+  "userId": "uuid",
+  "status": "pending",
+  "startDate": "2026-03-01",
+  "endDate": "2026-03-05",
+  "dailyRate": "45.00",
+  "totalCost": "180.00",
+  "car": { "id": "uuid", "brand": "Toyota", "model": "Corolla" },
+  "createdAt": "2026-02-28T12:00:00.000Z"
 }
 ```
 
@@ -220,14 +227,14 @@ Content-Type: application/json
 ### Get My Rentals
 
 ```http
-GET /rentals/my-rentals
+GET /api/rentals/my
 Authorization: Bearer <accessToken>
 ```
 
 ### Get Active Rentals _(Admin only)_
 
 ```http
-GET /rentals/active
+GET /api/rentals/active
 Authorization: Bearer <adminToken>
 ```
 
@@ -236,7 +243,7 @@ Authorization: Bearer <adminToken>
 ### Complete Rental _(Admin only)_
 
 ```http
-PATCH /rentals/:id/complete
+PATCH /api/rentals/:id/complete
 Authorization: Bearer <adminToken>
 ```
 
@@ -245,7 +252,7 @@ Marks rental as completed, records return time, applies late fees if applicable.
 ### Cancel Rental
 
 ```http
-PATCH /rentals/:id/cancel
+PATCH /api/rentals/:id/cancel
 Authorization: Bearer <accessToken>
 ```
 
@@ -262,21 +269,21 @@ Cancellation policy:
 ### List All Users
 
 ```http
-GET /users
+GET /api/users
 Authorization: Bearer <adminToken>
 ```
 
 ### Get User Details
 
 ```http
-GET /users/:id
+GET /api/users/:id
 Authorization: Bearer <adminToken>
 ```
 
 ### Soft Delete User
 
 ```http
-DELETE /users/:id
+DELETE /api/users/:id
 Authorization: Bearer <adminToken>
 ```
 
@@ -288,22 +295,12 @@ Sets `deletedAt` timestamp. User cannot login after deletion. Data is preserved.
 
 ### Create Admin
 
-```http
-POST /auth/create-admin
-Authorization: Bearer <superadminToken>
-Content-Type: application/json
+Superadmin creates admin accounts by registering and then updating the user's role directly in the database (no dedicated endpoint — handled via seed or DB insert). The register endpoint creates `user` role only.
 
-{
-  "email": "admin@example.com",
-  "password": "SecurePass123!"
-}
-```
-
-### Delete Admin
-
-```http
-DELETE /users/:id/admin
-Authorization: Bearer <superadminToken>
+```bash
+# Create via DB (example — run from psql)
+INSERT INTO users (email, password, first_name, last_name, role)
+VALUES ('admin@example.com', '<bcrypt-hash>', 'Admin', 'User', 'admin');
 ```
 
 ---
@@ -316,7 +313,8 @@ All errors follow this format:
 {
   "statusCode": 400,
   "message": "Car is already booked for the selected period",
-  "error": "Bad Request"
+  "path": "/api/rentals",
+  "timestamp": "2026-02-28T12:00:00.000Z"
 }
 ```
 
