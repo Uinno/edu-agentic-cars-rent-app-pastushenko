@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import type { Car, CarWithDistance } from "@/types/car.types";
-import { Map, MapOff } from "lucide-react";
+import { Map, ZapOff } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 function todayStr() {
@@ -131,7 +131,7 @@ export function CarsPage() {
             aria-label={showMap ? "Hide map" : "Show map"}
           >
             {showMap ? (
-              <MapOff className="h-4 w-4" />
+              <ZapOff className="h-4 w-4" />
             ) : (
               <Map className="h-4 w-4" />
             )}
